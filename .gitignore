@@ -1,13 +1,13 @@
-# Binaries
-linkchecker
-linkanalyzer
-linkindexer
-linklatency
-serpreview
-linkcanonical
-pagerank
-metacheck
-siteaudit
+# Binaries (root directory only)
+/linkchecker
+/linkanalyzer
+/linkindexer
+/linklatency
+/serpreview
+/linkcanonical
+/pagerank
+/metacheck
+/siteaudit
 
 # IDE
 .idea/
