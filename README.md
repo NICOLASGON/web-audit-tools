@@ -14,6 +14,7 @@ A collection of command-line SEO and web analysis tools written in Go. These too
 | `linkcanonical` | Verify canonical URL configuration |
 | `pagerank` | Calculate internal PageRank scores |
 | `metacheck` | Check meta description lengths |
+| `linkmigration` | Detect lost links after site migration |
 | `siteaudit` | Run a comprehensive SEO audit combining all tools |
 
 ## Installation
@@ -32,6 +33,7 @@ go build -o serpreview ./cmd/serpreview
 go build -o linkcanonical ./cmd/linkcanonical
 go build -o pagerank ./cmd/pagerank
 go build -o metacheck ./cmd/metacheck
+go build -o linkmigration ./cmd/linkmigration
 go build -o siteaudit ./cmd/siteaudit
 
 # Or build all at once
@@ -218,6 +220,30 @@ Example:
   ./metacheck -a -d 3 https://example.com
 ```
 
+### LinkMigration - Lost Links Detector
+
+Detects links that exist on an old site but are no longer available on a new site after migration.
+
+```bash
+./linkmigration [options] <old-site-url> <new-site-url>
+
+Phase 1: Crawls the old site to collect all URLs
+Phase 2: Checks if each URL is available on the new site
+
+Options:
+  -c, --concurrency int   Number of concurrent requests (default 10)
+  -t, --timeout int       Request timeout in seconds (default 10)
+  -d, --depth int         Maximum crawl depth, 0 = unlimited (default 0)
+  -v, --verbose           Show progress for each URL checked
+  -g, --get               Use GET requests instead of HEAD for checking
+      --csv               Output lost links as CSV format
+
+Example:
+  ./linkmigration https://old-site.com https://new-site.com
+  ./linkmigration -c 20 -d 3 -v https://old.example.com https://new.example.com
+  ./linkmigration --csv https://old-site.com https://new-site.com > lost-links.csv
+```
+
 ### SiteAudit - Comprehensive SEO Audit
 
 Runs a complete SEO audit combining all tools and generates a detailed report with scores and recommendations.
@@ -263,6 +289,7 @@ The **Overall Score** is a weighted average of all four categories.
 | `linkchecker` | 1 | Broken links found |
 | `linkcanonical` | 1 | Canonical issues found |
 | `metacheck` | 1 | Too long or missing descriptions |
+| `linkmigration` | 1 | Lost links found |
 | `siteaudit` | 1 | Score < 70 |
 | `siteaudit` | 2 | Score < 50 |
 
@@ -279,6 +306,7 @@ web-tools/
 │   ├── linkcanonical/    # Canonical verifier CLI
 │   ├── pagerank/         # PageRank calculator CLI
 │   ├── metacheck/        # Meta description checker CLI
+│   ├── linkmigration/    # Lost links detector CLI
 │   └── siteaudit/        # Comprehensive audit CLI
 ├── internal/
 │   ├── crawler/          # Web crawler with link extraction
@@ -289,6 +317,7 @@ web-tools/
 │   ├── canonical/        # Canonical URL verification
 │   ├── pagerank/         # PageRank algorithm
 │   ├── metacheck/        # Meta description analysis
+│   ├── migration/        # Site migration link checker
 │   └── audit/            # Comprehensive audit orchestration
 ├── go.mod
 └── README.md
